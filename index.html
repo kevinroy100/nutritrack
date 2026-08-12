@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Track calories, macros, vitamins, minerals, and steps daily">
+    <title>NutriTrack - Health Tracker</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="food-search-styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <h1>NutriTrack</h1>
+            <div class="header-date" id="headerDate"></div>
+        </header>
+
+        <!-- Navigation Tabs -->
+        <nav class="tab-navigation">
+            <button class="tab-btn active" data-tab="dashboard">Dashboard</button>
+            <button class="tab-btn" data-tab="nutrition">Nutrition</button>
+            <button class="tab-btn" data-tab="activity">Activity</button>
+            <button class="tab-btn" data-tab="settings">Settings</button>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="tab-content">
+            <!-- Dashboard Tab -->
+            <section id="dashboard" class="tab-pane active">
+                <div class="daily-summary">
+                    <h2>Today's Summary</h2>
+                    
+                    <div class="progress-ring-container">
+                        <div class="progress-card">
+                            <div class="progress-ring">
+                                <svg width="120" height="120" viewBox="0 0 120 120">
+                                    <circle cx="60" cy="60" r="50" class="progress-bg"></circle>
+                                    <circle cx="60" cy="60" r="50" class="progress-fill" id="calorieRing"></circle>
+                                </svg>
+                                <div class="progress-text" id="calorieText">0/2000</div>
+                            </div>
+                            <p class="progress-label">Calories</p>
+                        </div>
+
+                        <div class="progress-card">
+                            <div class="progress-ring">
+                                <svg width="120" height="120" viewBox="0 0 120 120">
+                                    <circle cx="60" cy="60" r="50" class="progress-bg"></circle>
+                                    <circle cx="60" cy="60" r="50" class="progress-fill" id="proteinRing"></circle>
+                                </svg>
+                                <div class="progress-text" id="proteinText">0g</div>
+                            </div>
+                            <p class="progress-label">Protein</p>
+                        </div>
+
+                        <div class="progress-card">
+                            <div class="progress-ring">
+                                <svg width="120" height="120" viewBox="0 0 120 120">
+                                    <circle cx="60" cy="60" r="50" class="progress-bg"></circle>
+                                    <circle cx="60" cy="60" r="50" class="progress-fill" id="stepsRing"></circle>
+                                </svg>
+                                <div class="progress-text" id="stepsText">0</div>
+                            </div>
+                            <p class="progress-label">Steps</p>
+                        </div>
+                    </div>
+
+                    <div class="quick-stats">
+                        <div class="stat-item">
+                            <span class="stat-label">Water</span>
+                            <span class="stat-value" id="waterValue">0</span> <span class="stat-unit">cups</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Carbs</span>
+                            <span class="stat-value" id="carbsValue">0</span> <span class="stat-unit">g</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Fat</span>
+                            <span class="stat-value" id="fatValue">0</span> <span class="stat-unit">g</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Nutrition Tab -->
+            <section id="nutrition" class="tab-pane">
+                <div class="nutrition-section">
+                    <h2>Log Food</h2>
+                    
+                    <!-- Food Search Component (inserted by food-search.js) -->
+                    
+                    <form id="foodForm" class="food-form">
+                        <div class="form-group">
+                            <label for="foodName">Food Name</label>
+                            <input type="text" id="foodName" placeholder="e.g., Chicken Breast" required>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="foodCalories">Calories</label>
+                                <input type="number" id="foodCalories" placeholder="165" min="0" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="foodProtein">Protein (g)</label>
+                                <input type="number" id="foodProtein" placeholder="31" min="0" step="0.1">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="foodCarbs">Carbs (g)</label>
+                                <input type="number" id="foodCarbs" placeholder="0" min="0" step="0.1">
+                            </div>
+                            <div class="form-group">
+                                <label for="foodFat">Fat (g)</label>
+                                <input type="number" id="foodFat" placeholder="3.6" min="0" step="0.1">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Log Food</button>
+                    </form>
+
+                    <div class="food-log">
+                        <h3>Today's Foods</h3>
+                        <ul id="foodList" class="food-list"></ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Activity Tab -->
+            <section id="activity" class="tab-pane">
+                <div class="activity-section">
+                    <h2>Log Activity</h2>
+                    
+                    <div class="activity-form">
+                        <div class="form-group">
+                            <label for="stepsInput">Steps Today</label>
+                            <input type="number" id="stepsInput" placeholder="10000" min="0" value="0">
+                        </div>
+                        <button class="btn btn-primary" id="updateStepsBtn">Update Steps</button>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="waterInput">Water Intake</label>
+                        <div class="water-buttons">
+                            <button class="btn btn-secondary" data-water="1">+1 Cup</button>
+                            <button class="btn btn-secondary" data-water="8">+8 Cups</button>
+                            <button class="btn btn-secondary" data-water="16">+16 Cups</button>
+                            <input type="number" id="waterInput" placeholder="Cups" min="0" max="20" value="0">
+                        </div>
+                        <button class="btn btn-primary" id="logWaterBtn">Log Water</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Settings Tab -->
+            <section id="settings" class="tab-pane">
+                <div class="settings-section">
+                    <h2>Daily Goals</h2>
+                    <form id="settingsForm" class="settings-form">
+                        <div class="form-group">
+                            <label for="calorieGoal">Calorie Goal (per day)</label>
+                            <input type="number" id="calorieGoal" placeholder="2000" min="1000" max="5000" value="2000">
+                        </div>
+                        <div class="form-group">
+                            <label for="proteinGoal">Protein Goal (g)</label>
+                            <input type="number" id="proteinGoal" placeholder="150" min="0" step="5" value="150">
+                        </div>
+                        <div class="form-group">
+                            <label for="carbsGoal">Carbs Goal (g)</label>
+                            <input type="number" id="carbsGoal" placeholder="250" min="0" step="5" value="250">
+                        </div>
+                        <div class="form-group">
+                            <label for="fatGoal">Fat Goal (g)</label>
+                            <input type="number" id="fatGoal" placeholder="65" min="0" step="5" value="65">
+                        </div>
+                        <div class="form-group">
+                            <label for="waterGoal">Water Goal (cups)</label>
+                            <input type="number" id="waterGoal" placeholder="8" min="1" max="20" value="8">
+                        </div>
+                        <div class="form-group">
+                            <label for="stepsGoal">Steps Goal (per day)</label>
+                            <input type="number" id="stepsGoal" placeholder="10000" min="1000" step="500" value="10000">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Save Goals</button>
+                    </form>
+
+                    <div class="settings-actions">
+                        <h2>Data Management</h2>
+                        <button class="btn btn-secondary" id="exportDataBtn">Export Data</button>
+                        <button class="btn btn-danger" id="clearDataBtn">Clear All Data</button>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Scripts in order -->
+    <script src="storage.js"></script>
+    <script src="fooddb.js"></script>
+    <script src="food-search.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
